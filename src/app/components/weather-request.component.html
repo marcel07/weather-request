@@ -2,7 +2,7 @@
     <h2>Get weather by:</h2>
 
     <md-tab-group>
-        <md-tab label="City Name">
+        <md-tab label="City Name"> <br>
             <label for="cityName">City Name</label>
             <md-input-container>
                 <input type="text" mdInput placeholder="City">
@@ -16,21 +16,41 @@
 
 
         </md-tab>
-        <md-tab label="City ID">
+        <md-tab label="City ID"> <br>
             <md-select placeholder="City ID">
                 <md-option>City ID 1</md-option>
             </md-select>
         </md-tab>
-        <md-tab label="Geographic Coordinates">
-            <md-select placeholder="Coords Latitude">
-                <md-option>Latitude 1</md-option>
-            </md-select>
 
-            <md-select placeholder="Coords Longitude">
-                <md-option>Longitude 1</md-option>
-            </md-select>
+
+        <md-tab label="Geographic Coordinates"> <br>
+            <label for="latitude">Latitude:</label>
+            <md-input-container>
+                <input type="number" mdInput placeholder="Latitude">
+            </md-input-container>
+            <label for="longitude">Longitude:</label>
+            <md-input-container>
+                <input type="number" mdInput placeholder="Longitude">
+            </md-input-container><br>
+            <button md-raised-button (click)="getLatLong()" color="primary">Request</button>
+            <div [hidden]="!displayLatLong.temp">
+                <md-card>
+                    <md-card-content>
+
+                        <md-grid cols="3">Temperature</md-grid>
+
+
+
+                        <!--Current Temperature = {{displayLatLong.temp}} <br> <br>
+
+                        <button md-raised-button color="accent" (click)="convertToCelcius()">Convert to Celcius</button>-->
+                    </md-card-content>
+                </md-card>
+            </div>
         </md-tab>
-        <md-tab label="Zip Code">
+
+
+        <md-tab label="Zip Code"> <br>
             <md-select placeholder="Zip Code">
                 <md-option>Zip Codes 1</md-option>
             </md-select>

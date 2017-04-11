@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
+import { CountryCode } from './interfaces';
+
 @Injectable()
 export class GetCityWeatherService{
     private cityBaseUrl: string = 'api.openweathermap.org/data/2.5/forecast?q='
@@ -19,8 +21,4 @@ export class GetCityWeatherService{
                 .map(res => res.json())
                 .toPromise();
     }
-}
-
-export interface CountryCode{
-    alpha2Code: string;
 }
