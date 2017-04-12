@@ -14,27 +14,64 @@ import { WeatherOutput, CountryCode} from './../services/interfaces';
 
 export class WeatherRequestComponent implements OnInit {
     countryCodes: CountryCode[] = [];
-    latLongOutput: WeatherOutput[] = [];
     displayLatLong = [];
-    convertedDisplay: number[] = []
+    convertedDisplay: number[] = [];
+    weatherGrid: any[] = [];
+    finalTemp: WeatherOutput[] = [];
+    lat: number = 0;
+    lon: number = 0;
 
     
-    constructor(private _getCityWeather: GetCityWeatherService, private _getLangLongService: GetLatLongWeatherService) { }
+
+    
+    constructor(private _cityWeatherService: GetCityWeatherService, private _getLangLongService: GetLatLongWeatherService) { }
 
     ngOnInit() { 
-        this._getCityWeather.getCountryCodes().then(codes => this.countryCodes = codes);
+        this._cityWeatherService.getCountryCodes().then(data => this.countryCodes = data);
+        
     }
 
-    getLatLong(){
-        this._getLangLongService.getCoordsWeather().then(latLong => this.latLongOutput = latLong);
-        if(this.latLongOutput['list']){
-            this.displayLatLong = this.latLongOutput['list'][0]['main'];
-        }
+    displayAndStoreData(){
+        console.log("lat and long", this.lat, this.lon)
+        this._cityWeatherService.getCoordsWeather(this.lat, this.lon).then(
+            data => {
+                this.displayLatLong = data;
+                this.finalTemp = [];
+                this.displayLatLong.forEach(data => this.finalTemp.push(data));
+                console.log(this.finalTemp);
+                
+                this.finalTemp = this.finalTemp.splice(0, 10);
+
+                this.weatherGrid = [];
+                this.finalTemp.forEach(apiData => {
+                    this.weatherGrid.push( this.getForecastFromApiData(apiData) );
+                });
+
+            }
+        );
+    
     }
 
-    convertToCelcius(){
-        this.convertedDisplay = [this.displayLatLong['temp'] - 273];
+    getForecastFromApiData(data): Forecast {
 
-        console.log(this.convertedDisplay);
+        return {
+            date: data['dt_txt'],
+            minTemp: Math.round(data['main']['temp_min'] - 273.15),
+            maxTemp: Math.round(data['main']['temp_max'] - 273.15),
+            avgTemp: Math.round(data['main']['temp'] - 273.15),
+            humidity: Math.round(data['main']['humidity'] ),
+            icon: data['weather'][0]['icon']
+        };
+
     }
 }
+  
+interface Forecast {
+    date: string;
+    minTemp: number;
+    maxTemp: number;
+    avgTemp: number;
+    humidity: number;
+    icon: string;
+}
+    

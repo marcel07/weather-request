@@ -26,26 +26,31 @@
         <md-tab label="Geographic Coordinates"> <br>
             <label for="latitude">Latitude:</label>
             <md-input-container>
-                <input type="number" mdInput placeholder="Latitude">
+                <input required type="number" mdInput placeholder="Latitude" [(ngModel)]="lat">
             </md-input-container>
             <label for="longitude">Longitude:</label>
             <md-input-container>
-                <input type="number" mdInput placeholder="Longitude">
+                <input required type="number" mdInput placeholder="Longitude" [(ngModel)]="lon">
             </md-input-container><br>
-            <button md-raised-button (click)="getLatLong()" color="primary">Request</button>
-            <div [hidden]="!displayLatLong.temp">
-                <md-card>
-                    <md-card-content>
+            <div>
 
-                        <md-grid cols="3">Temperature</md-grid>
+                <md-grid-list *ngIf="weatherGrid.length" cols="5">
+                    <md-grid-tile rowspan="1" colspan="1" *ngFor="let forecast of weatherGrid">
 
+                        <div style="text-align: center;">
 
+                            <img src="http://openweathermap.org/img/w/{{ forecast.icon }}.png" alt="">
+                            <div style="font-size: 18px;">{{ forecast.avgTemp }}&deg;C</div>
+                            <div><small>Min: {{ forecast.minTemp }}</small></div>
+                            <div><small>Max: {{ forecast.maxTemp }}</small></div>
+                            <div><small>Hum: {{ forecast.humidity }}%</small></div>
+                        </div>
 
-                        <!--Current Temperature = {{displayLatLong.temp}} <br> <br>
+                    </md-grid-tile>
+                </md-grid-list>
+                <br><br>
+                <button md-raised-button (click)="displayAndStoreData()" color="primary">Get Weather</button>
 
-                        <button md-raised-button color="accent" (click)="convertToCelcius()">Convert to Celcius</button>-->
-                    </md-card-content>
-                </md-card>
             </div>
         </md-tab>
 
